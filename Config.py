@@ -1,5 +1,10 @@
-checkpoint_path = 'E:/Deep Learning/SSD-Tensorflow-master/logs/'
-gpu_memory_fraction = 0.7
-trainable_scopes='train'
-optimizer = 'adam'
-learning_rate_decay_type = 'expotential'
+
+model_name = 'ssd_300_vgg'
+preprocessing_name = 'ssd_300_vgg'
+dataset_dir = 'E:/DeepLearning/SSD-tensorflow-master/datasets/train/'
+dataset_split_name = 'train'
+dataset_name = 'pascalvoc_2012'
+
+batch_size = 1
+data_format = 'NHWC'
+num_classes = 20

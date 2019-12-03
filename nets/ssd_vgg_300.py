@@ -98,6 +98,7 @@ class SSDNet(object):
         feat_shapes=[(38, 38), (19, 19), (10, 10), (5, 5), (3, 3), (1, 1)],
         anchor_size_bounds=[0.15, 0.90],
         # anchor_size_bounds=[0.20, 0.90],
+        # anchor_size的设置和论文有差，但是基本上相同，尺寸的增长是线性的
         anchor_sizes=[(21., 45.),
                       (45., 99.),
                       (99., 153.),

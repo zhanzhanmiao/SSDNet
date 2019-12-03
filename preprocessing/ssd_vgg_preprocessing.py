@@ -209,6 +209,7 @@ def distorted_bounding_box_crop(image,
     with tf.name_scope(scope, 'distorted_bounding_box_crop', [image, bboxes]):
         # Each bounding box has shape [1, num_boxes, box coords] and
         # the coordinates are ordered [ymin, xmin, ymax, xmax].
+        # 生成用于剪裁图像的边界框，用作重新计算bbox的参考，bbox_begin是左上角点
         bbox_begin, bbox_size, distort_bbox = tf.image.sample_distorted_bounding_box(
                 tf.shape(image),
                 bounding_boxes=tf.expand_dims(bboxes, 0),
@@ -217,6 +218,7 @@ def distorted_bounding_box_crop(image,
                 area_range=area_range,
                 max_attempts=max_attempts,
                 use_image_if_no_bounding_boxes=True)
+        # 上面返回的distort_bbox维度为[1,1,4],所以这里要重新取出
         distort_bbox = distort_bbox[0, 0]
 
         # Crop the image to the specified bounding box.

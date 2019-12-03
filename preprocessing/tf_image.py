@@ -292,9 +292,11 @@ def random_flip_left_right(image, bboxes, seed=None):
     with tf.name_scope('random_flip_left_right'):
         image = ops.convert_to_tensor(image, name='image')
         _Check3DImage(image, require_static=False)
+        # 随机生成0-1之间的数，与0.5判断
         uniform_random = random_ops.random_uniform([], 0, 1.0, seed=seed)
         mirror_cond = math_ops.less(uniform_random, .5)
         # Flip image.
+        # control_flow_ops.cond相当于if-else语句
         result = control_flow_ops.cond(mirror_cond,
                                        lambda: array_ops.reverse_v2(image, [1]),
                                        lambda: image)

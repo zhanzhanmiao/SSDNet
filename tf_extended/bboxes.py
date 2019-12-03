@@ -152,9 +152,11 @@ def bboxes_resize(bbox_ref, bboxes, name=None):
     # Tensors inputs.
     with tf.name_scope(name, 'bboxes_resize'):
         # Translate.
+        # 相当于是把原点从[0,0]变换到了[bbox_ref[0], bbox_ref[1]]
         v = tf.stack([bbox_ref[0], bbox_ref[1], bbox_ref[0], bbox_ref[1]])
         bboxes = bboxes - v
         # Scale.
+        # 重新计算归一化的尺度
         s = tf.stack([bbox_ref[2] - bbox_ref[0],
                       bbox_ref[3] - bbox_ref[1],
                       bbox_ref[2] - bbox_ref[0],
@@ -416,12 +418,15 @@ def bboxes_filter_overlap(labels, bboxes,
       labels, bboxes: Filtered (or newly assigned) elements.
     """
     with tf.name_scope(scope, 'bboxes_filter', [labels, bboxes]):
+        # bbox被裁后，保留的部分与原来的面积比
         scores = bboxes_intersection(tf.constant([0, 0, 1, 1], bboxes.dtype),
                                      bboxes)
         mask = scores > threshold
+        # 保留所有的label和框，重叠区不够的label置负
         if assign_negative:
             labels = tf.where(mask, labels, -labels)
             # bboxes = tf.where(mask, bboxes, bboxes)
+        # 删除重叠区不够的label和框
         else:
             labels = tf.boolean_mask(labels, mask)
             bboxes = tf.boolean_mask(bboxes, mask)
